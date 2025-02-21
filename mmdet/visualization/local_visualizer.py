@@ -441,9 +441,14 @@ class DetLocalVisualizer(Visualizer):
             data_sample = data_sample.cpu()
 
         if draw_gt and data_sample is not None:
-            gt_img_data = image
+            if 'image' in data_sample:
+                input_tensor = data_sample.image.input.numpy()
+                input_array = (np.transpose(input_tensor, (1,2,0))*255).clip(0, 255)
+                gt_img_data = np.uint8(input_array)
+            else:
+                gt_img_data = image
             if 'gt_instances' in data_sample:
-                gt_img_data = self._draw_instances(image,
+                gt_img_data = self._draw_instances(gt_img_data,
                                                    data_sample.gt_instances,
                                                    classes, palette)
             if 'gt_sem_seg' in data_sample:
@@ -460,12 +465,17 @@ class DetLocalVisualizer(Visualizer):
                     gt_img_data, data_sample.gt_panoptic_seg, classes, palette)
 
         if draw_pred and data_sample is not None:
-            pred_img_data = image
+            if 'image' in data_sample:
+                input_tensor = data_sample.image.output.numpy()
+                input_array = (np.transpose(input_tensor, (1,2,0))*255).clip(0, 255)
+                pred_img_data = np.uint8(input_array)
+            else:
+                pred_img_data = image
             if 'pred_instances' in data_sample:
                 pred_instances = data_sample.pred_instances
                 pred_instances = pred_instances[
                     pred_instances.scores > pred_score_thr]
-                pred_img_data = self._draw_instances(image, pred_instances,
+                pred_img_data = self._draw_instances(pred_img_data, pred_instances,
                                                      classes, palette)
 
             if 'pred_sem_seg' in data_sample:

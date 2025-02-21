@@ -231,6 +231,18 @@ class DetDataSample(BaseDataElement):
     @pred_sem_seg.deleter
     def pred_sem_seg(self):
         del self._pred_sem_seg
+    
+    @property
+    def image(self) -> PixelData:
+        return self._image
+
+    @image.setter
+    def image(self, value: PixelData):
+        self.set_field(value, '_image', dtype=PixelData)
+
+    @image.deleter
+    def image(self):
+        del self._image
 
 
 SampleList = List[DetDataSample]
