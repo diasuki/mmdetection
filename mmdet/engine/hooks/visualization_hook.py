@@ -140,6 +140,7 @@ class DetVisualizationHook(Hook):
                 out_file = osp.basename(img_path)
                 out_file = osp.join(self.test_out_dir, out_file)
 
+            # visualize input and output with label
             self._visualizer.add_datasample(
                 osp.basename(img_path) if self.show else 'test_img',
                 img,
@@ -148,6 +149,37 @@ class DetVisualizationHook(Hook):
                 wait_time=self.wait_time,
                 pred_score_thr=self.score_thr,
                 out_file=out_file,
+                step=self._test_index)
+            
+            # only visualize input
+            image_name, image_ext = osp.splitext(osp.basename(img_path))
+            self._visualizer.add_datasample(
+                f'{image_name}_input{image_ext}' if self.show else 'test_img',
+                img,
+                data_sample=data_sample,
+                draw_gt=True,
+                draw_pred=False,
+                draw_gt_label=False,
+                draw_pred_label=False,
+                show=self.show,
+                wait_time=self.wait_time,
+                pred_score_thr=self.score_thr,
+                out_file=osp.join(self.test_out_dir, f'{image_name}_input{image_ext}'),
+                step=self._test_index)
+            
+            # only visualize output
+            self._visualizer.add_datasample(
+                f'{image_name}_output{image_ext}' if self.show else 'test_img',
+                img,
+                data_sample=data_sample,
+                draw_gt=False,
+                draw_pred=True,
+                draw_gt_label=False,
+                draw_pred_label=False,
+                show=self.show,
+                wait_time=self.wait_time,
+                pred_score_thr=self.score_thr,
+                out_file=osp.join(self.test_out_dir, f'{image_name}_output{image_ext}'),
                 step=self._test_index)
 
 

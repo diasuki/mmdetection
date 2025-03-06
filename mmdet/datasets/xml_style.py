@@ -106,6 +106,10 @@ class XMLDataset(BaseDetDataset):
         data_info['height'] = height
         data_info['width'] = width
 
+        # replace filename in img_path with filename in xml file
+        file_name = root.find('filename').text
+        data_info['img_path'] = osp.join(self.sub_data_root, osp.dirname(img_info['file_name']), file_name)
+
         data_info['instances'] = self._parse_instance_info(
             raw_ann_info, minus_one=True)
 

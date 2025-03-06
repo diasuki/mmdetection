@@ -16,6 +16,12 @@ def voc_classes() -> list:
     ]
 
 
+def voc_fog_classes() -> list:
+    return [
+        'person', 'car', 'bus', 'bicycle',  'motorbike' # 5 classes
+    ]
+
+
 def imagenet_det_classes() -> list:
     """Class names of ImageNet Det."""
     return [

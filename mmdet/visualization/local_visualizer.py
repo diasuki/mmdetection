@@ -397,6 +397,8 @@ class DetLocalVisualizer(Visualizer):
             data_sample: Optional['DetDataSample'] = None,
             draw_gt: bool = True,
             draw_pred: bool = True,
+            draw_gt_label: bool = True,
+            draw_pred_label: bool = True,
             show: bool = False,
             wait_time: float = 0,
             # TODO: Supported in mmengine's Viusalizer.
@@ -447,16 +449,16 @@ class DetLocalVisualizer(Visualizer):
                 gt_img_data = np.uint8(input_array)
             else:
                 gt_img_data = image
-            if 'gt_instances' in data_sample:
+            if draw_gt_label and 'gt_instances' in data_sample:
                 gt_img_data = self._draw_instances(gt_img_data,
                                                    data_sample.gt_instances,
                                                    classes, palette)
-            if 'gt_sem_seg' in data_sample:
+            if draw_gt_label and 'gt_sem_seg' in data_sample:
                 gt_img_data = self._draw_sem_seg(gt_img_data,
                                                  data_sample.gt_sem_seg,
                                                  classes, palette)
 
-            if 'gt_panoptic_seg' in data_sample:
+            if draw_gt_label and 'gt_panoptic_seg' in data_sample:
                 assert classes is not None, 'class information is ' \
                                             'not provided when ' \
                                             'visualizing panoptic ' \
@@ -471,19 +473,19 @@ class DetLocalVisualizer(Visualizer):
                 pred_img_data = np.uint8(input_array)
             else:
                 pred_img_data = image
-            if 'pred_instances' in data_sample:
+            if draw_pred_label and 'pred_instances' in data_sample:
                 pred_instances = data_sample.pred_instances
                 pred_instances = pred_instances[
                     pred_instances.scores > pred_score_thr]
                 pred_img_data = self._draw_instances(pred_img_data, pred_instances,
                                                      classes, palette)
 
-            if 'pred_sem_seg' in data_sample:
+            if draw_pred_label and 'pred_sem_seg' in data_sample:
                 pred_img_data = self._draw_sem_seg(pred_img_data,
                                                    data_sample.pred_sem_seg,
                                                    classes, palette)
 
-            if 'pred_panoptic_seg' in data_sample:
+            if draw_pred_label and 'pred_panoptic_seg' in data_sample:
                 assert classes is not None, 'class information is ' \
                                             'not provided when ' \
                                             'visualizing panoptic ' \
